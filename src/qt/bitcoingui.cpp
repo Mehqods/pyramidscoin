@@ -25,6 +25,7 @@
 #include "ui_interface.h"
 #include "wallet.h"
 #include "init.h"
+#include "ChatWindow.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -97,6 +98,10 @@ BitcoinGUI::BitcoinGUI(QWidget *parent) :
     // Create system tray icon and notification
     createTrayIcon();
 
+	//Create tabs
+	chatWindow = new ChatWindow(this);
+	centralWidget->addWidget(chatWindow);
+	
     // Create status bar
     statusBar();
 
@@ -227,7 +232,12 @@ void BitcoinGUI::createActions()
     optionsAction->setMenuRole(QAction::PreferencesRole);
     toggleHideAction = new QAction(QIcon(":/icons/bitcoin"), tr("&Show / Hide"), this);
     toggleHideAction->setStatusTip(tr("Show or hide the main Window"));
-
+	chatAction = new QAction(QIcon(":/icons/chat"), tr("&Talk Code"), this);
+	chatAction->setToolTip(tr("Talk Code Within The Network"));
+	chatAction->setCheckable(true);
+	chatAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+	tabGroup->addAction(chatAction);
+	
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setStatusTip(tr("Encrypt the private keys that belong to your wallet"));
     encryptWalletAction->setCheckable(true);
@@ -253,6 +263,7 @@ void BitcoinGUI::createActions()
     connect(changePassphraseAction, SIGNAL(triggered()), walletFrame, SLOT(changePassphrase()));
     connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
+	connect(chatAction, SIGNAL(triggered()), this, SLOT(gotoChatWindow()));
 }
 
 void BitcoinGUI::createMenuBar()
@@ -291,6 +302,7 @@ void BitcoinGUI::createToolBars()
     QToolBar *toolbar = addToolBar(tr("Tabs toolbar"));
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->addAction(overviewAction);
+	toolbar->addAction(chatAction);
     toolbar->addAction(sendCoinsAction);
     toolbar->addAction(receiveCoinsAction);
     toolbar->addAction(historyAction);
@@ -412,6 +424,7 @@ void BitcoinGUI::createTrayIconMenu()
     trayIconMenu->addAction(sendCoinsAction);
     trayIconMenu->addAction(receiveCoinsAction);
     trayIconMenu->addSeparator();
+	trayIconMenu->addAction(chatAction);
     trayIconMenu->addAction(signMessageAction);
     trayIconMenu->addAction(verifyMessageAction);
     trayIconMenu->addSeparator();
@@ -755,6 +768,16 @@ void BitcoinGUI::dropEvent(QDropEvent *event)
 
     event->acceptProposedAction();
 }
+
+void BitcoinGUI::gotoChatWindow()
+{
+    chatAction->setChecked(true);
+    centralWidget->setCurrentWidget(chatWindow);
+
+    exportAction->setEnabled(false);
+    disconnect(exportAction, SIGNAL(triggered()), 0, 0);
+}
+
 
 bool BitcoinGUI::eventFilter(QObject *object, QEvent *event)
 {
