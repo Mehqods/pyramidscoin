@@ -208,7 +208,6 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/walletframe.h \
     src/bitcoinrpc.h \
     src/qt/overviewpage.h \
-	src/qt/ChatWindow.h \
     src/qt/csvmodelwriter.h \
     src/crypter.h \
     src/qt/sendcoinsentry.h \
@@ -299,7 +298,6 @@ SOURCES += src/qt/bitcoin.cpp \
     src/rpcblockchain.cpp \
     src/rpcrawtransaction.cpp \
     src/qt/overviewpage.cpp \
-	src/qt/ChatWindow.cxx \
     src/qt/csvmodelwriter.cpp \
     src/crypter.cpp \
     src/qt/sendcoinsentry.cpp \
@@ -327,9 +325,7 @@ SOURCES += src/qt/bitcoin.cpp \
     src/echo.c \
     src/simd.c
 
-RESOURCES += \
-	src/qt/bitcoin.qrc
-	src/qt/images.qrc
+RESOURCES += src/qt/bitcoin.qrc
 
 FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/coincontroldialog.ui \
@@ -339,7 +335,6 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/editaddressdialog.ui \
     src/qt/forms/transactiondescdialog.ui \
     src/qt/forms/overviewpage.ui \
-	src/qt/forms/ChatWindow.ui \
     src/qt/forms/sendcoinsentry.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
